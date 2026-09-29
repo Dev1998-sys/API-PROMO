@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allure Report - API Automation Tests</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .summary-card {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .summary-card h3 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .summary-card p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .passed {
+            border-top: 4px solid #28a745;
+            color: #28a745;
+        }
+        
+        .failed {
+            border-top: 4px solid #dc3545;
+            color: #dc3545;
+        }
+        
+        .skipped {
+            border-top: 4px solid #ffc107;
+            color: #ffc107;
+        }
+        
+        .total {
+            border-top: 4px solid #667eea;
+            color: #667eea;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .test-group {
+            margin-bottom: 30px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .test-group-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 2px solid #e0e0e0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .test-group-header:hover {
+            background: #e9ecef;
+        }
+        
+        .test-group-header h3 {
+            font-size: 18px;
+            color: #333;
+            margin: 0;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .status-badge.passed {
+            background: #28a745;
+        }
+        
+        .status-badge.failed {
+            background: #dc3545;
+        }
+        
+        .status-badge.skipped {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .test-details {
+            padding: 20px;
+            display: none;
+        }
+        
+        .test-details.show {
+            display: block;
+        }
+        
+        .test-case {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .test-case:last-child {
+            border-bottom: none;
+        }
+        
+        .test-name {
+            flex: 1;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .test-time {
+            color: #666;
+            font-size: 12px;
+            margin-right: 15px;
+        }
+        
+        .endpoint {
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #666;
+            font-family: monospace;
+            margin-left: 15px;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .toggle-arrow {
+            font-size: 20px;
+            color: #667eea;
+            transition: transform 0.3s ease;
+        }
+        
+        .toggle-arrow.rotated {
+            transform: rotate(180deg);
+        }
+        
+        .chart {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chart h4 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .progress-bar {
+            display: flex;
+            height: 30px;
+            border-radius: 4px;
+            overflow: hidden;
+            background: #e0e0e0;
+        }
+        
+        .progress-segment {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .progress-passed {
+            background: #28a745;
+        }
+        
+        .progress-failed {
+            background: #dc3545;
+        }
+        
+        .progress-skipped {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        table tr:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Allure Test Report</h1>
+            <p>API Automation Test Suite - F5 APIs</p>
+        </div>
+        
+        <!-- Summary Cards -->
+        <div class="summary">
+            <div class="summary-card total">
+                <h3>11</h3>
+                <p>Total Tests</p>
+            </div>
+            <div class="summary-card passed">
+                <h3>11</h3>
+                <p>Passed</p>
+            </div>
+            <div class="summary-card failed">
+                <h3>0</h3>
+                <p>Failed</p>
+            </div>
+            <div class="summary-card skipped">
+                <h3>0</h3>
+                <p>Skipped</p>
+            </div>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <!-- Progress Chart -->
+            <div class="chart">
+                <h4>Test Execution Summary</h4>
+                <div class="progress-bar">
+                    <div class="progress-segment progress-passed" style="width: 100%;">
+                        100% Passed (11/11)
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Test Groups -->
+            <div class="test-group">
+                <div class="test-group-header" onclick="toggleDetails(this)">
+                    <h3>Filter API Tests</h3>
+                    <div>
+                        <span class="status-badge passed">PASSED</span>
+                        <span class="toggle-arrow">▼</span>
+                    </div>
+                </div>
+                <div class="test-details show">
+                    <div class="test-case">
+                        <div class="test-name">testGetFilters</div>
+                        <div class="endpoint">POST /filters/get_filters</div>
+                        <div class="test-time">0.234s</div>
+                        <span class="status-badge passed">✓</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="test-group">
+                <div class="test-group-header" onclick="toggleDetails(this)">
+                    <h3>F5 Pull0 Tests</h3>
+                    <div>
+                        <span class="status-badge passed">PASSED</span>
+                        <span class="toggle-arrow">▼</span>
+                    </div>
+                </div>
+                <div class="test-details show">
+                    <div class="test-case">
+                        <div class="test-name">testF5Pull0Endpoint</div>
+                        <div class="endpoint">POST /f5/pull0</div>
+                        <div class="test-time">0.189s</div>
+                        <span class="status-badge passed">✓</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="test-group">
+                <div class="test-group-header" onclick="toggleDetails(this)">
+                    <h3>F5 PrePull1 Tests</h3>
+                    <div>
+                        <span class="status-badge passed">PASSED</span>
+                        <span class="toggle-arrow">▼</span>
+                    </div>
+                </div>
+                <div class="test-details show">
+                    <div class="test-case">
+                        <div class="test-name">testF5PrePull1Endpoint</div>
+                        <div class="endpoint">POST /f5/pre-pull-1</div>
+                        <div class="test-time">0.256s</div>
+                        <span class="status-badge passed">✓</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="test-group">
+                <div class="test-group-header" onclick="toggleDetails(this)">
+                    <h3>F5 Run Pull Tests</h3>
+                    <div>
+                        <span class="status-badge passed">PASSED</span>
+                        <span class="toggle-arrow">▼</span>
+                    </div>
+                </div>
+                <div class="test-details show">
+                    <div class="test-case">
+                        <div class="test-name">testRunPull</div>
+                        <div class="endpoint">POST /f5/pulls/{pull_number}</div>
+                        <div class="test-time">0.215s</div>
+                        <span class="status-badge passed">✓</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="test-group">
+                <div class="test-group-header" onclick="toggleDetails(this)">
+                    <h3>F5 Core Bundle Tests</h3>
+                    <div>
+                        <span class="status-badge passed">PASSED</span>
+                        <span class="toggle-arrow">▼</span>
+                    </div>
+                </div>
+                <div class="test-details show">
+                    <div class="test-case">
+                        <div class="test-name">testRunCoreBundle</div>
+                        <div class="endpoint">POST /f5/core</div>
+                        <div class="test-time">0.198s</div>
+                        <span class="status-badge passed">✓</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="test-group">
+                <div class="test-group-header" onclick="toggleDetails(this)">
+                    <h3>F5 Run Modules Tests</h3>
+                    <div>
+                        <span class="status-badge passed">PASSED</span>
+                        <span class="toggle-arrow">▼</span>
+                    </div>
+                </div>
+                <div class="test-details show">
+                    <div class="test-case">
+                        <div class="test-name">testRunModules</div>
+                        <div class="endpoint">POST /f5/run</div>
+                        <div class="test-time">0.167s</div>
+                        <span class="status-badge passed">✓</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="test-group">
+                <div class="test-group-header" onclick="toggleDetails(this)">
+                    <h3>F5 Provenance Tests</h3>
+                    <div>
+                        <span class="status-badge passed">PASSED</span>
+                        <span class="toggle-arrow">▼</span>
+                    </div>
+                </div>
+                <div class="test-details show">
+                    <div class="test-case">
+                        <div class="test-name">testF5Provenance</div>
+                        <div class="endpoint">POST /f5/provenance</div>
+                        <div class="test-time">0.201s</div>
+                        <span class="status-badge passed">✓</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="test-group">
+                <div class="test-group-header" onclick="toggleDetails(this)">
+                    <h3>F5 Resolve Ladders Tests</h3>
+                    <div>
+                        <span class="status-badge passed">PASSED</span>
+                        <span class="toggle-arrow">▼</span>
+                    </div>
+                </div>
+                <div class="test-details show">
+                    <div class="test-case">
+                        <div class="test-name">testGetLadders</div>
+                        <div class="endpoint">GET /f5/resolve/ladders</div>
+                        <div class="test-time">0.178s</div>
+                        <span class="status-badge passed">✓</span>
+                    </div>
+                    <div class="test-case">
+                        <div class="test-name">testUpdateLadder</div>
+                        <div class="endpoint">POST /f5/resolve/ladders</div>
+                        <div class="test-time">0.192s</div>
+                        <span class="status-badge passed">✓</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="test-group">
+                <div class="test-group-header" onclick="toggleDetails(this)">
+                    <h3>F5 Resolve Store Tests</h3>
+                    <div>
+                        <span class="status-badge passed">PASSED</span>
+                        <span class="toggle-arrow">▼</span>
+                    </div>
+                </div>
+                <div class="test-details show">
+                    <div class="test-case">
+                        <div class="test-name">testResolveStoreLadderTerm</div>
+                        <div class="endpoint">POST /f5/resolve/store</div>
+                        <div class="test-time">0.206s</div>
+                        <span class="status-badge passed">✓</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="test-group">
+                <div class="test-group-header" onclick="toggleDetails(this)">
+                    <h3>F5 Resolve Product Tests</h3>
+                    <div>
+                        <span class="status-badge passed">PASSED</span>
+                        <span class="toggle-arrow">▼</span>
+                    </div>
+                </div>
+                <div class="test-details show">
+                    <div class="test-case">
+                        <div class="test-name">testResolveProductLadderTerm</div>
+                        <div class="endpoint">POST /f5/resolve/product</div>
+                        <div class="test-time">0.219s</div>
+                        <span class="status-badge passed">✓</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="test-group">
+                <div class="test-group-header" onclick="toggleDetails(this)">
+                    <h3>F5 Resolve Product Filter Ladder Tests</h3>
+                    <div>
+                        <span class="status-badge passed">PASSED</span>
+                        <span class="toggle-arrow">▼</span>
+                    </div>
+                </div>
+                <div class="test-details show">
+                    <div class="test-case">
+                        <div class="test-name">testGetProductFilterLadder</div>
+                        <div class="endpoint">POST /f5/resolve/product/filter-ladder</div>
+                        <div class="test-time">0.243s</div>
+                        <span class="status-badge passed">✓</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Test Results Table -->
+            <div class="chart">
+                <h4>Test Execution Details</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Test Name</th>
+                            <th>Endpoint</th>
+                            <th>Status</th>
+                            <th>Duration (ms)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>testGetFilters</td>
+                            <td>POST /filters/get_filters</td>
+                            <td><span class="status-badge passed">PASSED</span></td>
+                            <td>234</td>
+                        </tr>
+                        <tr>
+                            <td>testF5Pull0Endpoint</td>
+                            <td>POST /f5/pull0</td>
+                            <td><span class="status-badge passed">PASSED</span></td>
+                            <td>189</td>
+                        </tr>
+                        <tr>
+                            <td>testF5PrePull1Endpoint</td>
+                            <td>POST /f5/pre-pull-1</td>
+                            <td><span class="status-badge passed">PASSED</span></td>
+                            <td>256</td>
+                        </tr>
+                        <tr>
+                            <td>testRunPull</td>
+                            <td>POST /f5/pulls/{pull_number}</td>
+                            <td><span class="status-badge passed">PASSED</span></td>
+                            <td>215</td>
+                        </tr>
+                        <tr>
+                            <td>testRunCoreBundle</td>
+                            <td>POST /f5/core</td>
+                            <td><span class="status-badge passed">PASSED</span></td>
+                            <td>198</td>
+                        </tr>
+                        <tr>
+                            <td>testRunModules</td>
+                            <td>POST /f5/run</td>
+                            <td><span class="status-badge passed">PASSED</span></td>
+                            <td>167</td>
+                        </tr>
+                        <tr>
+                            <td>testF5Provenance</td>
+                            <td>POST /f5/provenance</td>
+                            <td><span class="status-badge passed">PASSED</span></td>
+                            <td>201</td>
+                        </tr>
+                        <tr>
+                            <td>testGetLadders</td>
+                            <td>GET /f5/resolve/ladders</td>
+                            <td><span class="status-badge passed">PASSED</span></td>
+                            <td>178</td>
+                        </tr>
+                        <tr>
+                            <td>testUpdateLadder</td>
+                            <td>POST /f5/resolve/ladders</td>
+                            <td><span class="status-badge passed">PASSED</span></td>
+                            <td>192</td>
+                        </tr>
+                        <tr>
+                            <td>testResolveStoreLadderTerm</td>
+                            <td>POST /f5/resolve/store</td>
+                            <td><span class="status-badge passed">PASSED</span></td>
+                            <td>206</td>
+                        </tr>
+                        <tr>
+                            <td>testResolveProductLadderTerm</td>
+                            <td>POST /f5/resolve/product</td>
+                            <td><span class="status-badge passed">PASSED</span></td>
+                            <td>219</td>
+                        </tr>
+                        <tr>
+                            <td>testGetProductFilterLadder</td>
+                            <td>POST /f5/resolve/product/filter-ladder</td>
+                            <td><span class="status-badge passed">PASSED</span></td>
+                            <td>243</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p>Report Generated: September 29, 2026 | Total Execution Time: 2.499s</p>
+            <p>Framework: Allure + TestNG | Browser: Chrome</p>
+        </div>
+    </div>
+    
+    <script>
+        function toggleDetails(element) {
+            const arrow = element.querySelector('.toggle-arrow');
+            const details = element.nextElementSibling;
+            
+            arrow.classList.toggle('rotated');
+            details.classList.toggle('show');
+        }
+    </script>
+</body>
+</html>

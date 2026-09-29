@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-current.dtd">
+<suite name="API Automation Test Suite" parallel="false">
+    <listeners>
+        <listener class-name="utilities.AllureTestListener"/>
+        <listener class-name="io.qameta.allure.listener.AllureTestLifecycle"/>
+    </listeners>
+
+    <!-- F5 API Tests -->
+    <test name="Filter API Tests">
+        <classes>
+            <class name="F5_APIs.FilterAPI"/>
+        </classes>
+    </test>
+    <test name="F5 Pull0 Tests">
+        <classes>
+            <class name="F5_APIs.F5Pull0API"/>
+        </classes>
+    </test>
+    <test name="F5 PrePull1 Tests">
+        <classes>
+            <class name="F5_APIs.F5PrePull1API"/>
+        </classes>
+    </test>
+    <test name="F5 Run Pull Tests">
+        <classes>
+            <class name="F5_APIs.F5RunPullAPI"/>
+        </classes>
+    </test>
+    <test name="F5 Core Bundle Tests">
+        <classes>
+            <class name="F5_APIs.F5CoreBundleAPI"/>
+        </classes>
+    </test>
+    <test name="F5 Run Modules Tests">
+        <classes>
+            <class name="F5_APIs.F5RunModulesAPI"/>
+        </classes>
+    </test>
+    <test name="F5 Provenance Tests">
+        <classes>
+            <class name="F5_APIs.F5ProvenanceAPI"/>
+        </classes>
+    </test>
+    <test name="F5 Resolve Ladders Tests">
+        <classes>
+            <class name="F5_APIs.F5ResolveLaddersAPI"/>
+        </classes>
+    </test>
+    <test name="F5 Resolve Store Tests">
+        <classes>
+            <class name="F5_APIs.F5ResolveStoreAPI"/>
+        </classes>
+    </test>
+    <test name="F5 Resolve Product Tests">
+        <classes>
+            <class name="F5_APIs.F5ResolveProductAPI"/>
+        </classes>
+    </test>
+    <test name="F5 Resolve Product Filter Ladder Tests">
+        <classes>
+            <class name="F5_APIs.F5ResolveProductFilterLadderAPI"/>
+        </classes>
+    </test>
+
+    <!-- F2 API Tests -->
+    <test name="F2 Resolve Payload Tests">
+        <classes>
+            <class name="F2_APIs.F2ResolvePayloadAPI"/>
+        </classes>
+    </test>
+    <test name="F2 Resolve Ladders Tests">
+        <classes>
+            <class name="F2_APIs.F2ResolveLaddersAPI"/>
+        </classes>
+    </test>
+    <test name="F2 List Departments Tests">
+        <classes>
+            <class name="F2_APIs.F2ListDepartmentsAPI"/>
+        </classes>
+    </test>
+    <test name="F2 Resolve Department Tests">
+        <classes>
+            <class name="F2_APIs.F2ResolveDepartmentAPI"/>
+        </classes>
+    </test>
+    <test name="F2 Resolve Geography Tests">
+        <classes>
+            <class name="F2_APIs.F2ResolveGeographyAPI"/>
+        </classes>
+    </test>
+    <test name="F2 Resolve Search Event Tests">
+        <classes>
+            <class name="F2_APIs.F2ResolveSearchEventAPI"/>
+        </classes>
+    </test>
+    <test name="F2 Resolve Week Tests">
+        <classes>
+            <class name="F2_APIs.F2ResolveWeekAPI"/>
+        </classes>
+    </test>
+    <test name="F2 Intake Tests">
+        <classes>
+            <class name="F2_APIs.F2IntakeAPI"/>
+        </classes>
+    </test>
+    <test name="F2 Scope Run Tests">
+        <classes>
+            <class name="F2_APIs.F2ScopeRunAPI"/>
+        </classes>
+    </test>
+    <test name="F2 Gate A Preview Tests">
+        <classes>
+            <class name="F2_APIs.F2GateAPreviewAPI"/>
+        </classes>
+    </test>
+    <test name="F2 Gate A Confirm Tests">
+        <classes>
+            <class name="F2_APIs.F2GateAConfirmAPI"/>
+        </classes>
+    </test>
+    <test name="F2 Scope Step Tests">
+        <classes>
+            <class name="F2_APIs.F2ScopeStepAPI"/>
+        </classes>
+    </test>
+    <test name="F2 Measurement Tests">
+        <classes>
+            <class name="F2_APIs.F2MeasurementAPI"/>
+        </classes>
+    </test>
+    <test name="F2 Core Bundle Tests">
+        <classes>
+            <class name="F2_APIs.F2CoreBundleAPI"/>
+        </classes>
+    </test>
+    <test name="F2 Run Modules Tests">
+        <classes>
+            <class name="F2_APIs.F2RunModulesAPI"/>
+        </classes>
+    </test>
+    <test name="F2 Gate B Preview Tests">
+        <classes>
+            <class name="F2_APIs.F2GateBPreviewAPI"/>
+        </classes>
+    </test>
+    <test name="F2 Gate C Validate Tests">
+        <classes>
+            <class name="F2_APIs.F2GateCValidateAPI"/>
+        </classes>
+    </test>
+    <test name="F2 Assemble Output Tests">
+        <classes>
+            <class name="F2_APIs.F2AssembleOutputAPI"/>
+        </classes>
+    </test>
+</suite>
